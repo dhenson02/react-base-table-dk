@@ -1,27 +1,29 @@
-import React from 'react'
-import { graphql } from 'gatsby'
+import Html from 'components/Html';
+import Methods from 'components/Methods';
 
-import Page from 'components/Page'
-import Html from 'components/Html'
-import Props from 'components/Props'
-import Methods from 'components/Methods'
-import Pagination from 'components/Pagination'
+import Page from 'components/Page';
+import Pagination from 'components/Pagination';
+import Props from 'components/Props';
+import { graphql } from 'gatsby';
+import React from 'react';
 
-import siteConfig from 'siteConfig'
+import siteConfig from 'siteConfig';
 
-const links = siteConfig.api.map(item => ({
-  key: item.title,
-  title: item.title,
-  to: item.path,
-}))
+const links = siteConfig.api.map(item => (
+  {
+    key: item.title,
+    title: item.title,
+    to: item.path,
+  }
+));
 
 class ApiTemplate extends React.Component {
-  render() {
-    const { data, pageContext, location } = this.props
-    const metaData = data.componentMetadata
-    const methods = metaData.childrenComponentMethodExt
-    const name = pageContext.name
-    const link = links.find(link => link.to === `/api/${name.toLowerCase()}`)
+  render () {
+    const { data, pageContext, location } = this.props;
+    const metaData = data.componentMetadata;
+    const methods = metaData.childrenComponentMethodExt;
+    const name = pageContext.name;
+    const link = links.find(link => link.to === `/api/${name.toLowerCase()}`);
 
     return (
       <Page
@@ -35,52 +37,54 @@ class ApiTemplate extends React.Component {
         )}
         <Props props={metaData.props} />
         {methods.length > 0 && <Methods methods={methods} />}
-        <Pagination links={links} link={link} />
+        <Pagination
+          links={links}
+          link={link} />
       </Page>
-    )
+    );
   }
 }
 
-export default ApiTemplate
+export default ApiTemplate;
 
 export const pageQuery = graphql`
-  query ApiByName($name: String!) {
-    componentMetadata(displayName: { eq: $name }) {
-      displayName
-      description {
-        childMarkdownRemark {
-          htmlAst
+    query ApiByName($name: String!) {
+        componentMetadata(displayName: { eq: $name }) {
+            displayName
+            description {
+                childMarkdownRemark {
+                    htmlAst
+                }
+            }
+            props {
+                name
+                type {
+                    name
+                    value
+                    raw
+                }
+                required
+                description {
+                    childMarkdownRemark {
+                        htmlAst
+                    }
+                }
+                defaultValue {
+                    value
+                }
+            }
+            childrenComponentMethodExt {
+                name
+                params {
+                    name
+                    type {
+                        name
+                    }
+                }
+                childMarkdownRemark {
+                    htmlAst
+                }
+            }
         }
-      }
-      props {
-        name
-        type {
-          name
-          value
-          raw
-        }
-        required
-        description {
-          childMarkdownRemark {
-            htmlAst
-          }
-        }
-        defaultValue {
-          value
-        }
-      }
-      childrenComponentMethodExt {
-        name
-        params {
-          name
-          type {
-            name
-          }
-        }
-        childMarkdownRemark {
-          htmlAst
-        }
-      }
     }
-  }
-`
+`;

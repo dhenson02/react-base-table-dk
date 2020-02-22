@@ -1,20 +1,20 @@
-import React, { useMemo } from 'react'
-import styled from 'styled-components'
-import { useLiveRunner } from 'react-live-runner'
+import React, { useMemo } from 'react';
+import { useLiveRunner } from 'react-live-runner';
+import styled from 'styled-components';
+import { createActionChannel } from 'utils/actionChannel';
+import baseScope from 'utils/baseScope';
 
-import ActionPanel from './ActionPanel'
-import CodeEditor from './CodeEditor'
-import { createActionChannel } from 'utils/actionChannel'
-import baseScope from 'utils/baseScope'
+import ActionPanel from './ActionPanel';
+import CodeEditor from './CodeEditor';
 
 const Container = styled.div`
   height: 100%;
-`
+`;
 
 const StyledEditor = styled(CodeEditor)`
   height: 30rem;
   border-radius: 0.3rem;
-`
+`;
 
 const PreviewContainer = styled.div`
   min-height: 40rem;
@@ -27,11 +27,11 @@ const PreviewContainer = styled.div`
   padding: 1rem;
   margin-bottom: 1rem;
   box-shadow: 0 0 0.8rem 0 lightsteelblue;
-`
+`;
 
 const Preview = styled.div`
   margin: auto;
-`
+`;
 
 const Error = styled.div`
   background: #fcc;
@@ -43,26 +43,31 @@ const Error = styled.div`
   padding: 1rem;
   color: #f00;
   white-space: pre-wrap;
-`
+`;
 
-const CodePreview = ({
+const CodePreview = ( {
   code: sourceCode,
   scope: _scope,
   language,
   type,
   editorHeight = 300,
   ...rest
-}) => {
-  const { action, channel } = useMemo(createActionChannel, [])
-  const scope = useMemo(() => ({ ...baseScope, action, ..._scope }), [
+} ) => {
+  const { action, channel } = useMemo(createActionChannel, []);
+  const scope = useMemo(() => (
+    {
+      ...baseScope,
+      action, ..._scope,
+    }
+  ), [
     action,
     _scope,
-  ])
+  ]);
   const { element, error, onChange } = useLiveRunner({
     sourceCode,
     scope,
     type,
-  })
+  });
 
   return (
     <Container {...rest}>
@@ -78,7 +83,7 @@ const CodePreview = ({
         style={{ height: editorHeight }}
       />
     </Container>
-  )
-}
+  );
+};
 
-export default CodePreview
+export default CodePreview;

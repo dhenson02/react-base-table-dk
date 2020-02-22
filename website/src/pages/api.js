@@ -1,8 +1,8 @@
-import React from 'react'
-import { Redirect } from '@reach/router'
-import { withPrefix } from 'gatsby-link'
+import { Redirect } from '@reach/router';
 
-import Page from 'components/Page'
+import Page from 'components/Page';
+import { withPrefix } from 'gatsby-link';
+import React from 'react';
 
 const API = () => (
   <Page title="API">
@@ -12,6 +12,6 @@ const API = () => (
       noThrow
     />
   </Page>
-)
+);
 
-export default API
+export default API;

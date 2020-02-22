@@ -1,4 +1,4 @@
-# react-base-table
+# react-base-table-dk
 
 BaseTable is a react table component to display large datasets with high performance and flexibility
 
@@ -11,17 +11,17 @@ BaseTable is a react table component to display large datasets with high perform
 
 ```bash
 # npm
-npm install react-base-table --save
+npm install react-base-table-dk --save
 
 # yarn
-yarn add react-base-table
+yarn add react-base-table-dk
 ```
 
 ## Usage
 
 ```js
-import BaseTable, { Column } from 'react-base-table'
-import 'react-base-table/styles.css'
+import BaseTable, { Column } from 'react-base-table-dk'
+import 'react-base-table-dk/styles.css'
 
 ...
 <BaseTable data={data} width={600} height={400}>

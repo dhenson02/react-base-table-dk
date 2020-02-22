@@ -1,12 +1,19 @@
-const columns = generateColumns(10)
-const data = generateData(columns, 200)
+const columns = generateColumns(10);
+const data = generateData(columns, 200);
 
-const fixedColumns = columns.map((column, columnIndex) => {
-  let frozen
-  if (columnIndex < 2) frozen = Column.FrozenDirection.LEFT
-  if (columnIndex > 8) frozen = Column.FrozenDirection.RIGHT
-  return { ...column, frozen }
-})
+const fixedColumns = columns.map(( column, columnIndex ) => {
+  let frozen;
+  if ( columnIndex < 2 ) {
+    frozen = Column.FrozenDirection.LEFT;
+  }
+  if ( columnIndex > 8 ) {
+    frozen = Column.FrozenDirection.RIGHT;
+  }
+  return {
+    ...column,
+    frozen,
+  };
+});
 
 const Overlay = styled.div`
   background: lightgray;
@@ -17,7 +24,7 @@ const Overlay = styled.div`
   padding: 5px 15px;
   border-radius: 10px;
   color: white;
-`
+`;
 
 export default () => (
   <Table

@@ -1,8 +1,8 @@
-import React from 'react'
-import { Redirect } from '@reach/router'
-import { withPrefix } from 'gatsby-link'
+import { Redirect } from '@reach/router';
 
-import Page from 'components/Page'
+import Page from 'components/Page';
+import { withPrefix } from 'gatsby-link';
+import React from 'react';
 
 const Docs = () => (
   <Page title="Docs">
@@ -12,6 +12,6 @@ const Docs = () => (
       noThrow
     />
   </Page>
-)
+);
 
-export default Docs
+export default Docs;

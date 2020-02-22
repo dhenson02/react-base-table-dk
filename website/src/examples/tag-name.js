@@ -1,5 +1,5 @@
-const columns = generateColumns(10)
-const data = generateData(columns, 200)
+const columns = generateColumns(10);
+const data = generateData(columns, 200);
 
 const move = keyframes`
   from {
@@ -9,7 +9,7 @@ const move = keyframes`
   to {
     transform: translateX(100%);
   }
-`
+`;
 
 const InlineLoader = styled.div`
   overflow: hidden;
@@ -30,33 +30,33 @@ const InlineLoader = styled.div`
     background-image: linear-gradient(to right, transparent, #ccc, transparent);
     animation: ${move} 1.5s linear infinite;
   }
-`
+`;
 
 const CellLoader = styled(InlineLoader)`
   height: 16px !important;
-`
+`;
 
 const Cell = props => (
   <div {...props}>
     <CellLoader />
   </div>
-)
+);
 
 const RowLoader = styled(InlineLoader)`
   height: 16px !important;
   margin: 0 15px;
-`
+`;
 
 const Row = props => (
   <div {...props}>
     <RowLoader />
   </div>
-)
+);
 
-const cellProps = ({ rowIndex, columnIndex }) =>
-  rowIndex % 3 === 1 && columnIndex > 0 && { tagName: Cell }
+const cellProps = ( { rowIndex, columnIndex } ) =>
+  rowIndex % 3 === 1 && columnIndex > 0 && { tagName: Cell };
 
-const rowProps = ({ rowIndex }) => rowIndex % 3 === 2 && { tagName: Row }
+const rowProps = ( { rowIndex } ) => rowIndex % 3 === 2 && { tagName: Row };
 
 export default () => (
   <Table

@@ -1,6 +1,6 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Link } from 'gatsby'
+import { Link } from 'gatsby';
+import React from 'react';
+import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
@@ -9,7 +9,7 @@ const Container = styled.div`
   height: 5rem;
   margin-top: 2rem;
   border-top: 1px solid #edf0f2;
-`
+`;
 
 const StyledLink = styled(Link)`
   display: block;
@@ -23,13 +23,15 @@ const StyledLink = styled(Link)`
   &:active {
     color: #222;
   }
-`
+`;
 
-const Pagination = ({ links, link, ...rest }) => {
-  const index = links.indexOf(link)
-  if (index < 0) return null
-  const prevLink = index === 0 ? null : links[index - 1]
-  const nextLink = index === links.length - 1 ? null : links[index + 1]
+const Pagination = ( { links, link, ...rest } ) => {
+  const index = links.indexOf(link);
+  if ( index < 0 ) {
+    return null;
+  }
+  const prevLink = index === 0 ? null : links[ index - 1 ];
+  const nextLink = index === links.length - 1 ? null : links[ index + 1 ];
 
   return (
     <Container {...rest}>
@@ -44,7 +46,7 @@ const Pagination = ({ links, link, ...rest }) => {
         )}
       </div>
     </Container>
-  )
-}
+  );
+};
 
-export default Pagination
+export default Pagination;

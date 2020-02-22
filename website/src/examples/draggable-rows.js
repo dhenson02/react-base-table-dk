@@ -1,8 +1,8 @@
 // import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc'
-const { sortableContainer, sortableElement, sortableHandle } = ReactSortableHoc
-const DraggableContainer = sortableContainer(({ children }) => children)
-const DraggableElement = sortableElement(({ children }) => children)
-const DraggableHandle = sortableHandle(({ children }) => children)
+const { sortableContainer, sortableElement, sortableHandle } = ReactSortableHoc;
+const DraggableContainer = sortableContainer(( { children } ) => children);
+const DraggableElement = sortableElement(( { children } ) => children);
+const DraggableHandle = sortableHandle(( { children } ) => children);
 
 const Handle = styled.div`
   flex: none;
@@ -20,10 +20,12 @@ const Handle = styled.div`
   &:hover::before {
     border-color: #888;
   }
-`
+`;
 
-const Row = ({ key, index, children, ...rest }) => (
-  <DraggableElement key={key} index={index}>
+const Row = ( { key, index, children, ...rest } ) => (
+  <DraggableElement
+    key={key}
+    index={index}>
     <div {...rest}>
       <DraggableHandle>
         <Handle />
@@ -31,44 +33,46 @@ const Row = ({ key, index, children, ...rest }) => (
       {children}
     </div>
   </DraggableElement>
-)
+);
 
-const rowProps = ({ rowIndex }) => ({
-  tagName: Row,
-  index: rowIndex,
-})
+const rowProps = ( { rowIndex } ) => (
+  {
+    tagName: Row,
+    index: rowIndex,
+  }
+);
 
 class DraggableTable extends React.PureComponent {
   state = {
     data: this.props.data,
+  };
+
+  getContainer () {
+    return document.querySelector('.BaseTable__body');
   }
 
-  getContainer() {
-    return document.querySelector('.BaseTable__body')
-  }
-
-  getHelperContainer() {
-    return document.querySelector('.BaseTable__table')
+  getHelperContainer () {
+    return document.querySelector('.BaseTable__table');
   }
 
   rowProps = args => {
     // don't forget to passing the incoming rowProps
-    const extraProps = callOrReturn(this.props.rowProps)
+    const extraProps = callOrReturn(this.props.rowProps);
     return {
       ...extraProps,
       tagName: Row,
       index: args.rowIndex,
-    }
-  }
+    };
+  };
 
-  handleSortEnd = ({ oldIndex, newIndex }) => {
-    const data = [...this.state.data]
-    const [removed] = data.splice(oldIndex, 1)
-    data.splice(newIndex, 0, removed)
-    this.setState({ data })
-  }
+  handleSortEnd = ( { oldIndex, newIndex } ) => {
+    const data = [ ...this.state.data ];
+    const [ removed ] = data.splice(oldIndex, 1);
+    data.splice(newIndex, 0, removed);
+    this.setState({ data });
+  };
 
-  render() {
+  render () {
     return (
       <DraggableContainer
         useDragHandle
@@ -83,7 +87,7 @@ class DraggableTable extends React.PureComponent {
           rowProps={this.rowProps}
         />
       </DraggableContainer>
-    )
+    );
   }
 }
 
@@ -92,15 +96,17 @@ const Hint = styled.div`
   font-weight: 700;
   color: #336699;
   margin-bottom: 10px;
-`
+`;
 
-const columns = generateColumns(10)
-const data = generateData(columns, 200)
-columns[0].minWidth = 150
+const columns = generateColumns(10);
+const data = generateData(columns, 200);
+columns[ 0 ].minWidth = 150;
 
 export default () => (
   <>
     <Hint>Drag the dots, only works in flex mode(fixed=false)</Hint>
-    <DraggableTable columns={columns} data={data} />
+    <DraggableTable
+      columns={columns}
+      data={data} />
   </>
 )

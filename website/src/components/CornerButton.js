@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const CornerButton = styled.button`
   position: absolute;
@@ -17,6 +17,6 @@ const CornerButton = styled.button`
     opacity: 0.8;
     cursor: pointer;
   }
-`
+`;
 
-export default CornerButton
+export default CornerButton;

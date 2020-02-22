@@ -1,3 +1,5 @@
-src/examples/
-
 react-base-table/
+src/
+.cache/
+node_modules/
+public/

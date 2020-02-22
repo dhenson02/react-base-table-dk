@@ -1,19 +1,24 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react'
-import styled from 'styled-components'
-import { CodeEditor as Editor } from 'react-live-runner'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { CodeEditor as Editor } from 'react-live-runner';
+import styled from 'styled-components';
 
-import CopyButton from './CopyButton'
+import CopyButton from './CopyButton';
 
 const Container = styled.div`
   position: relative;
   overflow: hidden;
-`
+`;
 
 const EditorContainer = styled.div`
   overflow: auto;
   height: 100%;
-`
+`;
 
 const StyledEditor = styled(Editor)`
   font-family: source-code-pro, Menlo, Monaco, Consolas, Courier New, monospace;
@@ -30,25 +35,28 @@ const StyledEditor = styled(Editor)`
     outline: none;
     white-space: pre !important;
   }
-`
+`;
 
-const CodeEditor = ({ sourceCode, language, onChange, ...rest }) => {
-  const [code, setCode] = useState(sourceCode)
-  const debouncedChange = useMemo(() => debounce(onChange, 300), [onChange])
+const CodeEditor = ( { sourceCode, language, onChange, ...rest } ) => {
+  const [ code, setCode ] = useState(sourceCode);
+  const debouncedChange = useMemo(() => debounce(onChange, 300), [ onChange ]);
   const handleChange = useCallback(code => {
-    setCode(code)
-    debouncedChange(code)
-  }, [debouncedChange])
-  useEffect(() => setCode(sourceCode), [sourceCode])
+    setCode(code);
+    debouncedChange(code);
+  }, [ debouncedChange ]);
+  useEffect(() => setCode(sourceCode), [ sourceCode ]);
 
   return (
     <Container {...rest}>
       <EditorContainer>
-        <StyledEditor code={code} language={language} onChange={handleChange} />
+        <StyledEditor
+          code={code}
+          language={language}
+          onChange={handleChange} />
       </EditorContainer>
       <CopyButton content={code} />
     </Container>
-  )
-}
+  );
+};
 
-export default CodeEditor
+export default CodeEditor;

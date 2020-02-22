@@ -1,41 +1,53 @@
-import React from 'react'
-import Helmet from 'react-helmet'
-import styled, { css } from 'styled-components'
-import { StaticQuery, graphql } from 'gatsby'
+import {
+  graphql,
+  StaticQuery,
+} from 'gatsby';
+import React from 'react';
+import 'react-base-table/styles.css';
+import Helmet from 'react-helmet';
+import styled, { css } from 'styled-components';
 
-import Header from './Header'
-import Sidebar from './Sidebar'
+import '../styles/index.css';
 
-import '../styles/index.css'
-import 'react-base-table/styles.css'
+import Header from './Header';
+import Sidebar from './Sidebar';
 
 const pageMixin = css`
   margin: 0 auto;
   max-width: 100rem;
-`
+`;
 
 const Container = styled.div`
   position: relative;
   padding: 70px 20px 20px;
   ${props => !props.full && pageMixin};
-`
+`;
 
 const Content = styled.div`
   margin-left: 240px;
-`
+`;
 
-const Page = ({ title, location = {}, children, links, ...rest }) => (
+const Page = ( { title, location = {}, children, links, ...rest } ) => (
   <StaticQuery
     query={detailsQuery}
-    render={({ site }) => (
+    render={( { site } ) => (
       <React.Fragment>
         <Helmet
           title={title || site.config.title}
           titleTemplate={`%s | ${site.config.title}`}
           meta={[
-            { name: 'description', content: site.config.description },
-            { name: 'keywords', content: site.config.keywords },
-            { name: 'author', content: site.config.author },
+            {
+              name: 'description',
+              content: site.config.description,
+            },
+            {
+              name: 'keywords',
+              content: site.config.keywords,
+            },
+            {
+              name: 'author',
+              content: site.config.author,
+            },
           ]}
         />
         <Header pathname={location.pathname} />
@@ -52,19 +64,19 @@ const Page = ({ title, location = {}, children, links, ...rest }) => (
       </React.Fragment>
     )}
   />
-)
+);
 
-export default Page
+export default Page;
 
 const detailsQuery = graphql`
-  query {
-    site {
-      config: siteMetadata {
-        title
-        description
-        keywords
-        author
-      }
+    query {
+        site {
+            config: siteMetadata {
+                title
+                description
+                keywords
+                author
+            }
+        }
     }
-  }
-`
+`;

@@ -1,6 +1,6 @@
 {
-  "name": "react-base-table",
-  "version": "1.9.1",
+  "name": "react-base-table-dk",
+  "version": "1.9.2",
   "description": "a react table component to display large data set with high performance and flexibility",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -13,7 +13,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Autodesk/react-base-table.git"
+    "url": "https://github.com/dhenson02/react-base-table-dk.git"
   },
   "scripts": {
     "start": "cd website && npm start",
@@ -24,7 +24,6 @@
     "build:es": "cross-env BABEL_ENV=es NODE_ENV=production babel src -d es --ignore '**/*.spec.js','__snapshots__' --copy-files --source-maps",
     "build:css": "node-sass src/_BaseTable.scss ./styles.css --output-style expanded",
     "build": "npm run build:js && npm run build:es && npm run build:css",
-    "format": "prettier --write 'src/**/*.{js,scss}'",
     "prebuild": "npm run clean",
     "precommit": "lint-staged",
     "prepush": "npm run test",
@@ -33,18 +32,16 @@
   },
   "lint-staged": {
     "packages/**/*.scss": [
-      "prettier --write",
       "git add"
     ],
     "packages/**/*.js": [
-      "prettier --write",
-      "eslint -c .eslintrc",
       "git add"
     ]
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "classnames": "^2.2.5",
+    "fastdom": "^1.0.9",
     "memoize-one": "^5.0.0",
     "prop-types": "^15.7.0",
     "react-virtualized-auto-sizer": "^1.0.2",
@@ -68,19 +65,16 @@
     "babel-plugin-syntax-trailing-function-commas": "^6.22.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.6.0",
-    "eslint-config-prettier": "^3.0.1",
     "eslint-config-react-app": "^3.0.8",
     "eslint-plugin-flowtype": "^3.4.2",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
-    "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.11.1",
     "husky": "^0.14.3",
     "jest": "^23.5.0",
     "lerna": "^3.2.1",
     "lint-staged": "^7.2.2",
     "node-sass": "^4.9.3",
-    "prettier": "^1.14.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-test-renderer": "^16.4.2",

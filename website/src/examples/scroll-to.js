@@ -1,15 +1,17 @@
-const columns = generateColumns(10)
-const data = generateData(columns, 500)
+const columns = generateColumns(10);
+const data = generateData(columns, 500);
 
 const Button = styled.button`
   padding: 4px 8px;
   margin: 10px;
-`
+`;
 
 export default class App extends React.Component {
-  setRef = ref => (this.table = ref)
+  setRef = ref => (
+    this.table = ref
+  );
 
-  render() {
+  render () {
     return (
       <>
         <Button onClick={() => this.table.scrollToRow(100, 'auto')}>
@@ -32,13 +34,20 @@ export default class App extends React.Component {
         </Button>
         <Button
           onClick={() =>
-            this.table.scrollToPosition({ scrollLeft: 200, scrollTop: 2000 })
+            this.table.scrollToPosition({
+              scrollLeft: 200,
+              scrollTop: 2000,
+            })
           }
         >
           {'scrollToPosition({ scrollLeft: 200, scrollTop: 2000 })'}
         </Button>
-        <Table ref={this.setRef} fixed columns={columns} data={data} />
+        <Table
+          ref={this.setRef}
+          fixed
+          columns={columns}
+          data={data} />
       </>
-    )
+    );
   }
 }

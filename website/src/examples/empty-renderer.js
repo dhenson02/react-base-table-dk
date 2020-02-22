@@ -1,4 +1,4 @@
-const columns = generateColumns(10)
+const columns = generateColumns(10);
 
 const Empty = styled.div`
   display: flex;
@@ -6,7 +6,7 @@ const Empty = styled.div`
   justify-content: center;
   height: 100%;
   font-size: 16px;
-`
+`;
 
 export default () => (
   <Table

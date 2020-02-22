@@ -1,22 +1,30 @@
-import React, { useMemo, useCallback, useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { useLiveRunner } from 'react-live-runner'
-import CodeEditor from './CodeEditor'
-import CopyButton from './CopyButton'
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useLiveRunner } from 'react-live-runner';
+import styled from 'styled-components';
 
-import baseScope from 'utils/baseScope'
-import { getCode, replaceState } from 'utils/urlHash'
+import baseScope from 'utils/baseScope';
+import {
+  getCode,
+  replaceState,
+} from 'utils/urlHash';
+import CodeEditor from './CodeEditor';
+import CopyButton from './CopyButton';
 
 const Container = styled.div`
   position: relative;
   display: flex;
   box-shadow: 0 0 8px 0 lightsteelblue;
   height: 100%;
-`
+`;
 
 const StyledEditor = styled(CodeEditor)`
   flex: 0 1 60rem;
-`
+`;
 
 const PreviewContainer = styled.div`
   position: relative;
@@ -28,11 +36,11 @@ const PreviewContainer = styled.div`
   background: #f3f3f3;
   overflow: auto;
   background: #fff;
-`
+`;
 
 const Preview = styled.div`
   margin: auto;
-`
+`;
 
 const Error = styled.div`
   background: #fcc;
@@ -44,28 +52,30 @@ const Error = styled.div`
   padding: 1rem;
   color: #f00;
   white-space: pre-wrap;
-`
+`;
 
-const Playground = ({ scope: _scope, language, type, ...rest }) => {
-  const scope = useMemo(() => ({ ...baseScope, ..._scope }), [_scope])
-  const [sourceCode, setSourceCode] = useState(getCode)
+const Playground = ( { scope: _scope, language, type, ...rest } ) => {
+  const scope = useMemo(() => (
+    { ...baseScope, ..._scope }
+  ), [ _scope ]);
+  const [ sourceCode, setSourceCode ] = useState(getCode);
   const { element, error, onChange } = useLiveRunner({
     sourceCode,
     scope,
     type,
-  })
+  });
   const handleChange = useCallback(
     code => {
-      onChange(code)
-      replaceState(code)
+      onChange(code);
+      replaceState(code);
     },
-    [onChange]
-  )
+    [ onChange ],
+  );
 
-  const canUseDOM = typeof document !== 'undefined'
+  const canUseDOM = typeof document !== 'undefined';
   useEffect(() => {
-    setSourceCode(getCode)
-  }, [canUseDOM])
+    setSourceCode(getCode);
+  }, [ canUseDOM ]);
 
   return (
     <Container {...rest}>
@@ -79,10 +89,12 @@ const Playground = ({ scope: _scope, language, type, ...rest }) => {
         <Preview>{element}</Preview>
       </PreviewContainer>
       {typeof document !== 'undefined' && (
-        <CopyButton text="copy link" content={document.location.href} />
+        <CopyButton
+          text="copy link"
+          content={document.location.href} />
       )}
     </Container>
-  )
-}
+  );
+};
 
-export default Playground
+export default Playground;

@@ -1,4 +1,7 @@
-const columns = generateColumns(10)
-const data = generateData(columns, 200)
+const columns = generateColumns(10);
+const data = generateData(columns, 200);
 
-export default () => <Table columns={columns} data={data} disabled />
+export default () => <Table
+  columns={columns}
+  data={data}
+  disabled />
