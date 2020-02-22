@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import memoize from 'memoize-one';
+import memoize from 'fast-memoize';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Column, {
@@ -29,7 +29,8 @@ import {
     noop,
     normalizeColumns,
     renderElement,
-} from './utils';
+    throttle,
+} from './utils'; 
 
 const getColumns = memoize(( columns, children ) => columns || normalizeColumns(children));
 
@@ -363,7 +364,7 @@ class BaseTable extends React.PureComponent {
         const cellProps = {
             isScrolling,
             cellData,
-            columns,
+            // columns,
             column,
             columnIndex,
             rowData,
@@ -375,7 +376,7 @@ class BaseTable extends React.PureComponent {
 
         const cellCls = callOrReturn(className, {
             cellData,
-            columns,
+            // columns,
             column,
             columnIndex,
             rowData,
@@ -387,7 +388,7 @@ class BaseTable extends React.PureComponent {
         });
 
         const extraProps = callOrReturn(this.props.cellProps, {
-            columns,
+            // columns,
             column,
             columnIndex,
             rowData,
@@ -1059,19 +1060,25 @@ class BaseTable extends React.PureComponent {
 BaseTable.Column = Column;
 BaseTable.PlaceholderKey = ColumnManager.PlaceholderKey;
 
+export const HEADER_HEIGHT = 50;
+export const ROW_HEIGHT = 50;
+export const FOOTER_HEIGHT = 25;
+
 BaseTable.defaultProps = {
     classPrefix: 'BaseTable',
     rowKey: 'id',
     data: [],
     frozenData: [],
     fixed: false,
-    headerHeight: 50,
-    rowHeight: 50,
-    footerHeight: 0,
+    headerHeight: HEADER_HEIGHT,
+    rowHeight: ROW_HEIGHT,
+    footerHeight: FOOTER_HEIGHT,
     defaultExpandedRowKeys: [],
     sortBy: {},
     useIsScrolling: false,
-    overscanRowCount: 1,
+    overscanRowCount: (window.innerHeight - 15 - HEADER_HEIGHT - FOOTER_HEIGHT) / ROW_HEIGHT > 6
+        ? 1
+        : 3,
     onEndReachedThreshold: 500,
     getScrollbarSize: defaultGetScrollbarSize,
 

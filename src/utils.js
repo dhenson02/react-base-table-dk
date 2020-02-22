@@ -175,7 +175,7 @@ function getPathSegments ( path ) {
     for ( let i = 0; i < pathArray.length; i++ ) {
         let p = pathArray[ i ];
 
-        while ( p[ p.length - 1 ] === '\\' && pathArray[ i + 1 ] !== undefined ) {
+        while ( p.charAt(p.length - 1) === '\\' && pathArray[ i + 1 ] !== undefined ) {
             p = p.slice(0, -1) + '.';
             p += pathArray[ ++i ];
         }
@@ -244,9 +244,7 @@ export function throttle ( fn, wait ) {
 let scrollbarSize;
 
 export function getScrollbarSize ( recalculate ) {
-    if ( (
-        !scrollbarSize && scrollbarSize !== 0
-    ) || recalculate ) {
+    if ( (!scrollbarSize && scrollbarSize !== 0) || recalculate ) {
         if ( typeof window !== 'undefined' && window.document && window.document.createElement ) {
             let scrollDiv = document.createElement('div');
 
@@ -256,9 +254,15 @@ export function getScrollbarSize ( recalculate ) {
             scrollDiv.style.height = '50px';
             scrollDiv.style.overflow = 'scroll';
 
-            document.body.appendChild(scrollDiv);
-            scrollbarSize = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-            document.body.removeChild(scrollDiv);
+            fastdom.mutate(function () {
+                document.body.appendChild(this);
+                fastdom.measure(function () {
+                    scrollbarSize = this.offsetWidth - this.clientWidth;
+                    fastdom.mutate(function () {
+                        document.body.removeChild(this)
+                    }.bind(this));
+                }.bind(this))
+            }.bind(scrollDiv));
         }
     }
 
@@ -267,20 +271,28 @@ export function getScrollbarSize ( recalculate ) {
 
 export function addClassName ( el, className ) {
     if ( el.classList ) {
-        el.classList.add(className);
+        fastdom.mutate(function() {
+            this.classList.add(className);
+        }.bind(el));
     }
     else {
-        if ( !el.className.match(new RegExp(`(?:^|\\s)${className}(?!\\S)`)) ) {
-            el.className += ` ${className}`;
+        if ( !(new RegExp(`(?:^|\\s)${className}(?!\\S)`)).test(el.className) ) {
+            fastdom.mutate(function () {
+                this.className += ` ${className}`;
+            }.bind(el));
         }
     }
 }
 
 export function removeClassName ( el, className ) {
     if ( el.classList ) {
-        el.classList.remove(className);
+        fastdom.mutate(function () {
+            this.classList.remove(className)
+        }.bind(el));
     }
     else {
-        el.className = el.className.replace(new RegExp(`(?:^|\\s)${className}(?!\\S)`, 'g'), '');
+        fastdom.mutate(function () {
+            this.className = this.className.replace(new RegExp(`(?:^|\\s)${className}(?!\\S)`, 'g'), '')
+        }.bind(el));
     }
 }

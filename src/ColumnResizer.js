@@ -15,14 +15,15 @@ export function addUserSelectStyles ( doc ) {
     if ( !doc ) {
         return;
     }
-    let styleEl = doc.getElementById('react-draggable-style-el');
-    if ( !styleEl ) {
-        styleEl = doc.createElement('style');
-        styleEl.type = 'text/css';
-        styleEl.id = 'react-draggable-style-el';
-        styleEl.innerHTML = '.react-draggable-transparent-selection *::-moz-selection {background: transparent;}\n';
-        styleEl.innerHTML += '.react-draggable-transparent-selection *::selection {background: transparent;}\n';
-        doc.getElementsByTagName('head')[ 0 ].appendChild(styleEl);
+    if ( !doc.getElementById('react-draggable-style-el') ) {
+        fastdom.mutate(function () {
+            let styleEl = this.createElement('style');
+            styleEl.type = 'text/css';
+            styleEl.id = 'react-draggable-style-el';
+            styleEl.innerHTML = '.react-draggable-transparent-selection *::-moz-selection {background: transparent;}\n';
+            styleEl.innerHTML += '.react-draggable-transparent-selection *::selection {background: transparent;}\n';
+            this.getElementsByTagName('head')[ 0 ].appendChild(styleEl);
+        }.bind(doc))
     }
     if ( doc.body ) {
         addClassName(doc.body, 'react-draggable-transparent-selection');
@@ -35,11 +36,13 @@ export function removeUserSelectStyles ( doc ) {
             removeClassName(doc.body, 'react-draggable-transparent-selection');
         }
         if ( doc.selection ) {
-            doc.selection.empty();
+            fastdom.mutate(function () {
+                this.selection.empty()
+            }.bind(doc));
         }
         else {
-            window.getSelection()
-                .removeAllRanges(); // remove selection caused by scroll
+            // remove selection caused by scroll
+            fastdom.mutate(() => window.getSelection().removeAllRanges());
         }
     }
     catch ( e ) {
@@ -72,6 +75,15 @@ class ColumnResizer extends React.PureComponent {
         this.isDragging = false;
         this.lastX = INVALID_VALUE;
         this.width = 0;
+        this.defaultStyle = {
+            userSelect: 'none',
+            touchAction: 'none',
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            right: 0,
+            cursor: 'col-resize',
+        };
 
         this._setHandleRef = this._setHandleRef.bind(this);
         this._handleClick = this._handleClick.bind(this);
@@ -96,7 +108,15 @@ class ColumnResizer extends React.PureComponent {
     }
 
     render () {
-        const { style, column, onResizeStart, onResize, onResizeStop, minWidth, ...rest } = this.props;
+        const {
+            style,
+            column,
+            onResizeStart,
+            onResize,
+            onResizeStop,
+            minWidth,
+            ...rest
+        } = this.props;
 
         return (
             <div
@@ -107,16 +127,14 @@ class ColumnResizer extends React.PureComponent {
                 onMouseUp={this._handleMouseUp}
                 onTouchStart={this._handleTouchStart}
                 onTouchEnd={this._handleTouchEnd}
-                style={{
-                    userSelect: 'none',
-                    touchAction: 'none',
-                    position: 'absolute',
-                    top: 0,
-                    bottom: 0,
-                    right: 0,
-                    cursor: 'col-resize',
-                    ...style,
-                }}
+                style={
+                    style
+                        ? {
+                            ...this.defaultStyle,
+                            ...style,
+                        }
+                        : this.defaultStyle
+                }
             />
         );
     }
@@ -178,20 +196,19 @@ class ColumnResizer extends React.PureComponent {
         const { ownerDocument } = this.handleRef;
         ownerDocument.removeEventListener(dragEventFor.move, this._handleDrag);
         ownerDocument.removeEventListener(dragEventFor.stop, this._handleDragStop);
-        fastdom.mutate(() => removeUserSelectStyles(ownerDocument));
+        removeUserSelectStyles(ownerDocument);
     }
 
     _handleDrag ( e ) {
-        fastdom.measure(() => {
+        if ( e.type === eventsFor.touch.move ) {
+            e.preventDefault();
+        }
+        fastdom.measure(function ( e, offsetParent ) {
             let clientX = e.clientX;
-            if ( e.type === eventsFor.touch.move ) {
-                e.preventDefault();
-                if ( e.targetTouches && e.targetTouches[ 0 ] ) {
-                    clientX = e.targetTouches[ 0 ].clientX;
-                }
+            if ( e.type === eventsFor.touch.move && e.targetTouches && e.targetTouches[ 0 ] ) {
+                clientX = e.targetTouches[ 0 ].clientX;
             }
 
-            const { offsetParent } = this.handleRef;
             const offsetParentRect = offsetParent.getBoundingClientRect();
             const x = clientX + offsetParent.scrollLeft - offsetParentRect.left;
 
@@ -222,7 +239,7 @@ class ColumnResizer extends React.PureComponent {
                 return;
             }
             this.props.onResize(column, newWidth);
-        });
+        }.bind(this, e, this.handleRef.offsetParent));
     }
 }
 

@@ -275,7 +275,7 @@ $table-prefix: BaseTable !default;
     }
 
     &__column-resizer {
-        width: 3px;
+        width: 5px;
         visibility: hidden;
         background-color: $column-resizer-color;
 
@@ -295,7 +295,7 @@ $table-prefix: BaseTable !default;
         position: absolute;
         top: 0;
         background-color: $column-resizer-color;
-        width: 3px;
+        width: 5px;
         transform: translateX(-100%);
     }
 
