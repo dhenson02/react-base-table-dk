@@ -61,7 +61,14 @@ class BaseTable extends React.PureComponent {
     constructor ( props ) {
         super(props);
 
-        const { columns, children, defaultExpandedRowKeys } = props;
+        const {
+            columns,
+            children,
+            defaultExpandedRowKeys,
+            enableResizeThrottle,
+            resizeThrottleTimer,
+        } = props;
+
         this.state = {
             scrollbarSize: 0,
             hoveredRowKey: null,
@@ -87,8 +94,9 @@ class BaseTable extends React.PureComponent {
         this._handleRowsRendered = this._handleRowsRendered.bind(this);
         this._handleRowHover = this._handleRowHover.bind(this);
         this._handleRowExpand = this._handleRowExpand.bind(this);
-        // this._handleColumnResize = throttle(this._handleColumnResize.bind(this), RESIZE_THROTTLE_WAIT);
-        this._handleColumnResize = this._handleColumnResize.bind(this);
+        this._handleColumnResize = enableResizeThrottle
+            ? throttle(this._handleColumnResize.bind(this), resizeThrottleTimer)
+            : this._handleColumnResize.bind(this);
         this._handleColumnResizeStart = this._handleColumnResizeStart.bind(this);
         this._handleColumnResizeStop = this._handleColumnResizeStop.bind(this);
         this._handleColumnSort = this._handleColumnSort.bind(this);
@@ -1067,6 +1075,9 @@ BaseTable.defaultProps = {
     onEndReachedThreshold: 500,
     getScrollbarSize: defaultGetScrollbarSize,
 
+    enableResizeThrottle: false,
+    resizeThrottleTimer: RESIZE_THROTTLE_WAIT,
+
     onScroll: noop,
     onRowsRendered: noop,
     onScrollbarPresenceChange: noop,
@@ -1326,6 +1337,18 @@ BaseTable.propTypes = {
      * Custom scrollbar size measurement
      */
     getScrollbarSize: PropTypes.func,
+    /**
+     * Throttle the resize inputs to potentially prevent too much processing at
+     * once and appear janky
+     * - Default: false
+     */
+    enableResizeThrottle: PropTypes.bool,
+    /**
+     * If the above is enabled, how much time in between should wait until allowing
+     * the next execution
+     * - Default: 5 (ms)
+     */
+    resizeThrottleTimer: PropTypes.number,
     /**
      * A callback function when scrolling the table
      * The handler is of the shape of `({ scrollLeft, scrollTop, horizontalScrollDirection, verticalScrollDirection,
